@@ -1,2 +1,2 @@
 # Desafio_3
- compass UOL desafio 3: mensagens
+ compass UOL desafio 3: mensagens e comentarios
