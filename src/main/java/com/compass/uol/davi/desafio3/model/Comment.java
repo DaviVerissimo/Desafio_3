@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Comments {
+public class Comment {
 	
 	@Id
 	private Number id;	
