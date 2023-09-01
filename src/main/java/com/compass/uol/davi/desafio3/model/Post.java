@@ -16,7 +16,7 @@ public class Post {
 	private String body;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-	private List<Comments> comments;
+	private List<Comment> comments;
 	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
 	private List<History> History;
 
@@ -44,11 +44,11 @@ public class Post {
 		this.body = body;
 	}
 
-	public List<Comments> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comments> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 
