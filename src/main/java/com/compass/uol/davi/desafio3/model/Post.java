@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 public class Post {
 	@Id
 	private Number id;
+	private Number userId;
 	private String title;
 	@Column(name = "body", length = 500)
 	private String body;
@@ -63,6 +64,14 @@ public class Post {
 
 	public void setHistory(List<History> history) {
 		this.history = history;
+	}
+
+	public Number getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Number userId) {
+		this.userId = userId;
 	}
 
 }
