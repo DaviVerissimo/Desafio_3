@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,25 @@ public class PostService {
 				.build();
 		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 		String jsonResponse = response.body();
-		// ObjectMapper do Jackson para desserializar o JSON
+		// Jackson for deserialize the JSON
 		ObjectMapper objectMapper = new ObjectMapper();
 		List<Post> posts = objectMapper.readValue(jsonResponse, new TypeReference<List<Post>>() {
 		});
+
+		return posts;
+	}
+
+	public Post savePost(Post post) {
+		postRepository.save(post);
+		
+		return post;
+	}
+
+	public List<Post> saveAllPost(List<Post> posts) {
+		for (int i = 0; i < posts.size(); i++) {
+			Post post = posts.get(i);
+			this.savePost(post);
+		}
 
 		return posts;
 	}
