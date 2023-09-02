@@ -3,22 +3,27 @@ package com.compass.uol.davi.desafio3.model;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "post")
 public class Post {
 	@Id
 	private Number id;
-	private String title;	
+	private String title;
+	@Column(name = "body", length = 500)
 	private String body;
-	
-	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private List<Comment> comments;
-	@OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-	private List<History> History;
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+	private List<History> history;
 
 	public Number getId() {
 		return id;
@@ -53,11 +58,11 @@ public class Post {
 	}
 
 	public List<History> getHistory() {
-		return History;
+		return history;
 	}
 
 	public void setHistory(List<History> history) {
-		History = history;
+		this.history = history;
 	}
 
 }
