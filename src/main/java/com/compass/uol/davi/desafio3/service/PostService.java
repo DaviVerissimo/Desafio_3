@@ -5,8 +5,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,9 +43,26 @@ public class PostService {
 		return posts;
 	}
 
+	public List<Post> getAllPost() {
+		List<Post> posts = postRepository.findAll();
+		if (posts.isEmpty()) {
+			try {
+				List<Post> postsAPI = seachAllPostAPI();
+				postsAPI = this.saveAllPost(postsAPI);
+				posts = postsAPI;
+
+			} catch (IOException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return posts;
+	}
+
 	public Post savePost(Post post) {
 		postRepository.save(post);
-		
+
 		return post;
 	}
 
@@ -54,6 +73,30 @@ public class PostService {
 		}
 
 		return posts;
+	}
+
+	public Post seachPostByID(Number id) {
+		Post post = null;
+		Optional<Post> postAux = postRepository.findById(id);
+		if (postAux.isPresent()) {
+			post = postAux.get();
+		} else {
+			// launch exception PostNotFoundException
+		}
+
+		return post;
+	}
+
+	public Post deletePostByID(Number id) {
+		Post post = this.seachPostByID(id);
+
+		if (!post.equals(null)) {
+			postRepository.deleteById(id);
+		} else {
+			// launch exception PostNotFoundException
+		}
+
+		return post;
 	}
 
 }

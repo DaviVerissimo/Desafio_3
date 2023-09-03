@@ -23,12 +23,7 @@ public class PostController {
 	@GetMapping("/posts")
 	public ResponseEntity<List<Post>> saveAllPost(){
 	    List<Post> posts = null;
-		try {
-			posts = postService.seachAllPostAPI();
-		} catch (IOException | InterruptedException e) {
-			
-			e.printStackTrace();
-		}
+		posts = postService.getAllPost();
 	    return ResponseEntity.ok(posts); // Define o código de status 200 OK
 	}
 }
