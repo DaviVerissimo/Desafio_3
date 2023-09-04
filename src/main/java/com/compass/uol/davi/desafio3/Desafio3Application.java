@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.compass.uol.davi.desafio3.model.Post;
 import com.compass.uol.davi.desafio3.service.PostService;
 
+import dto.PostDTO;
+
 @SpringBootApplication
 public class Desafio3Application  implements CommandLineRunner{
 	
@@ -22,7 +24,7 @@ public class Desafio3Application  implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		 List<Post> posts = postService.seachAllPostAPI();
+		 List<PostDTO> posts = postService.seachAllPostAPI();
 		 postService.saveAllPost(posts);
 	}
 

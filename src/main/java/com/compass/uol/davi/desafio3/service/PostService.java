@@ -18,6 +18,8 @@ import com.compass.uol.davi.desafio3.repository.PostRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dto.PostDTO;
+
 @Service
 public class PostService {
 
@@ -29,7 +31,7 @@ public class PostService {
 		this.postRepository = postRepository;
 	}
 
-	public List<Post> seachAllPostAPI() throws IOException, InterruptedException {
+	public List<PostDTO> seachAllPostAPI() throws IOException, InterruptedException {
 		HttpClient httpClient = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://jsonplaceholder.typicode.com/posts"))
 				.build();
@@ -37,7 +39,7 @@ public class PostService {
 		String jsonResponse = response.body();
 		// Jackson for deserialize the JSON
 		ObjectMapper objectMapper = new ObjectMapper();
-		List<Post> posts = objectMapper.readValue(jsonResponse, new TypeReference<List<Post>>() {
+		List<PostDTO> posts = objectMapper.readValue(jsonResponse, new TypeReference<List<PostDTO>>() {
 		});
 
 		return posts;
@@ -55,9 +57,9 @@ public class PostService {
 		return post;
 	}
 
-	public List<Post> saveAllPost(List<Post> posts) {
+	public List<PostDTO> saveAllPost(List<PostDTO> posts) {
 		for (int i = 0; i < posts.size(); i++) {
-			Post post = posts.get(i);
+			Post post = new Post(posts.get(i));
 			// criar historico inicial para o post aqui
 			this.savePost(post);
 		}
