@@ -45,17 +45,6 @@ public class PostService {
 
 	public List<Post> getAllPost() {
 		List<Post> posts = postRepository.findAll();
-		if (posts.isEmpty()) {
-			try {
-				List<Post> postsAPI = seachAllPostAPI();
-				postsAPI = this.saveAllPost(postsAPI);
-				posts = postsAPI;
-
-			} catch (IOException | InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 
 		return posts;
 	}
@@ -69,6 +58,7 @@ public class PostService {
 	public List<Post> saveAllPost(List<Post> posts) {
 		for (int i = 0; i < posts.size(); i++) {
 			Post post = posts.get(i);
+			// criar historico inicial para o post aqui
 			this.savePost(post);
 		}
 
@@ -79,7 +69,6 @@ public class PostService {
 		Post post = null;
 		Optional<Post> postAux = postRepository.findById(id);
 		if (postAux.isPresent()) {
-			System.out.println("Entrou aqui");
 			post = postAux.get();
 		} else {
 			// launch exception PostNotFoundException
