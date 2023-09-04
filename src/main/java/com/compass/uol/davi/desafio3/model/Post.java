@@ -15,8 +15,8 @@ import jakarta.persistence.Table;
 @Table(name = "post")
 public class Post {
 	@Id
-	private Number id;
-	private Number userId;
+	private Integer id;
+	private Integer userId;
 	private String title;
 	@Column(name = "body", length = 500)
 	private String body;
@@ -25,53 +25,44 @@ public class Post {
 	private List<Comment> comments;
 	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
 	private List<History> history;
-
-	public Number getId() {
+	
+	public Integer getId() {
 		return id;
 	}
-
-	public void setId(Number id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	public Integer getUserId() {
+		return userId;
+	}
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 	public String getTitle() {
 		return title;
 	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 	public String getBody() {
 		return body;
 	}
-
 	public void setBody(String body) {
 		this.body = body;
 	}
-
 	public List<Comment> getComments() {
 		return comments;
 	}
-
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
-
 	public List<History> getHistory() {
 		return history;
 	}
-
 	public void setHistory(List<History> history) {
 		this.history = history;
 	}
 
-	public Number getUserId() {
-		return userId;
-	}
 
-	public void setUserId(Number userId) {
-		this.userId = userId;
-	}
 
 }

@@ -1,10 +1,10 @@
 package com.compass.uol.davi.desafio3.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.compass.uol.davi.desafio3.model.Post;
@@ -19,11 +19,19 @@ public class PostController {
 
 		this.postService = postService;
 	}
-	
+
 	@GetMapping("/posts")
-	public ResponseEntity<List<Post>> saveAllPost(){
-	    List<Post> posts = null;
+	public ResponseEntity<List<Post>> saveAllPost() {
+		List<Post> posts = null;
 		posts = postService.getAllPost();
-	    return ResponseEntity.ok(posts); // Define o código de status 200 OK
+
+		return ResponseEntity.ok(posts); // Define o código de status 200 OK
+	}
+
+	@GetMapping("/posts/{id}")
+	public ResponseEntity<Post> getPostByID(@PathVariable Integer id) {
+		Post post = postService.seachPostByID(id);
+
+		return ResponseEntity.ok(post);
 	}
 }

@@ -75,10 +75,11 @@ public class PostService {
 		return posts;
 	}
 
-	public Post seachPostByID(Number id) {
+	public Post seachPostByID(Integer id) {
 		Post post = null;
 		Optional<Post> postAux = postRepository.findById(id);
 		if (postAux.isPresent()) {
+			System.out.println("Entrou aqui");
 			post = postAux.get();
 		} else {
 			// launch exception PostNotFoundException
@@ -87,7 +88,7 @@ public class PostService {
 		return post;
 	}
 
-	public Post deletePostByID(Number id) {
+	public Post deletePostByID(Integer id) {
 		Post post = this.seachPostByID(id);
 
 		if (!post.equals(null)) {
