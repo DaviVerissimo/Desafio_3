@@ -1,5 +1,6 @@
 package com.compass.uol.davi.desafio3.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
@@ -11,23 +12,42 @@ import jakarta.persistence.Table;
 public class History {
 
 	@Id
-	private Number id;
-	private Date date;
+	private Integer id;
+	private LocalDate date;
 	private String status;
+	private Integer idPost;
 
-	public Number getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Number id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public Date getDate() {
+	public Integer getIdPost() {
+		return idPost;
+	}
+
+	public void setIdPost(Integer idPost) {
+		this.idPost = idPost;
+	}
+
+	public History() {
+
+	}
+
+	public History(Integer idPost, LocalDate date, String status) {
+		this.idPost = idPost;
+		this.date = date;
+		this.status = status;
+	}
+
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

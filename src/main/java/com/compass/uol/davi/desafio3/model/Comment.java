@@ -10,15 +10,15 @@ import jakarta.persistence.Table;
 public class Comment {
 
 	@Id
-	private Number id;
+	private Integer id;
 	@Column(name = "body", length = 500)
 	private String body;
 
-	public Number getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Number id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

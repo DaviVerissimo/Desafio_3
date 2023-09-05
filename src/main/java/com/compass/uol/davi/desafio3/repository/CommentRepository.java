@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.compass.uol.davi.desafio3.model.Comment;
 
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Number> {
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
 }
