@@ -1,8 +1,7 @@
 package com.compass.uol.davi.desafio3.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,8 @@ public class HistoryService {
 		this.historyRepository = historyRepository;
 	}
 
-	public History saveHistory(Integer idPost, String statusAtual, boolean success) {
-		LocalDate date = LocalDate.now();
-		String status = DefinedStatus.define(statusAtual, success);
+	public History saveHistory(Integer idPost, String status) {
+		LocalDateTime date = LocalDateTime.now();
 		History history = new History(idPost, date, status);
 		historyRepository.save(history);
 
@@ -33,11 +31,6 @@ public class HistoryService {
 
 	public List<History> getHistoryOfPost(Integer id) {
 		List<History> list = new ArrayList<>();
-		List<History> listAux = historyRepository.findByIdPost(id);
-		if (!listAux.isEmpty()) {
-			list = listAux.stream().sorted(Comparator.comparing(History::getDate)).toList();
-
-		}
 
 		return list;
 	}

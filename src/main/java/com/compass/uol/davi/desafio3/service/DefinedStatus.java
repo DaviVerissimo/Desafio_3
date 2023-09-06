@@ -7,13 +7,13 @@ public abstract class DefinedStatus {
 	public static String define(String currentStatus, boolean success) {
 		String status = null;
 		
-		if (currentStatus.equals(null)) {
-			status = State.CREATED;
-		}
-		else if (currentStatus.equals(State.CREATED)) {
+//		if (currentStatus == null) {
+//			status = State.CREATED;
+//		}
+		if (currentStatus.equals(State.CREATED) ) {
 			status = State.POST_FIND;
 		}
-		else if (currentStatus.equals(State.POST_FIND)) {
+		if (currentStatus == State.POST_FIND) {
 			if (success) {
 				status = State.POST_OK;
 			}
@@ -21,10 +21,10 @@ public abstract class DefinedStatus {
 				status = State.FAILED;
 			}
 		}
-		else if (currentStatus.equals(State.POST_OK)) {
+		if (currentStatus == State.POST_OK) {
 			status = State.COMMENTS_FIND;
 		}
-		else if (currentStatus.equals(State.COMMENTS_FIND)) {
+		if (currentStatus == State.COMMENTS_FIND) {
 			if (success) {
 				status = State.COMMENTS_OK;
 			}
@@ -32,10 +32,10 @@ public abstract class DefinedStatus {
 				status = State.FAILED;
 			}
 		}
-		else if (currentStatus.equals(State.COMMENTS_OK)) {
+		if (currentStatus == State.COMMENTS_OK) {
 			status = State.ENABLED;
 		}
-		else if (currentStatus.equals(State.ENABLED)) {
+		if (currentStatus == State.ENABLED) {
 			if (success) {
 				status = State.UPDATING;
 			}
@@ -43,15 +43,16 @@ public abstract class DefinedStatus {
 				status = State.DISABLED;
 			}
 		}
-		else if (currentStatus.equals(State.FAILED)) {
+		if (currentStatus  == State.FAILED) {
 				status = State.DISABLED;
 		}
-		else if (currentStatus.equals(State.DISABLED)) {
+		if (currentStatus == State.DISABLED) {
 			status = State.UPDATING;
 		}
-		else if (currentStatus.equals(State.UPDATING)) {
+		if (currentStatus == State.UPDATING) {
 			define(currentStatus, success);
 		}
+		System.out.println("status defined status "+ status);
 		
 		return status;
 	}

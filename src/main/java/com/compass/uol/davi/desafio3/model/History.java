@@ -1,9 +1,10 @@
 package com.compass.uol.davi.desafio3.model;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -12,8 +13,9 @@ import jakarta.persistence.Table;
 public class History {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private LocalDate date;
+	private LocalDateTime date;
 	private String status;
 	private Integer idPost;
 
@@ -37,17 +39,17 @@ public class History {
 
 	}
 
-	public History(Integer idPost, LocalDate date, String status) {
+	public History(Integer idPost, LocalDateTime date, String status) {
 		this.idPost = idPost;
 		this.date = date;
 		this.status = status;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
