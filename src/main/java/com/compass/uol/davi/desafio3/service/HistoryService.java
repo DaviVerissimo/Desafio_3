@@ -31,8 +31,19 @@ public class HistoryService {
 
 	public List<History> getHistoryOfPost(Integer id) {
 		List<History> list = new ArrayList<>();
+//		List<History> listAux = historyRepository.findByIdPost(id);
+//		if (!listAux.isEmpty()) {
+//			list = listAux;
+//		}
 
 		return list;
 	}
-
+	
+	public void deleteHistoryOfPost(Integer id) {
+		List<History> list = historyRepository.findByIdPost(id);
+		for (int i = 0; i < list.size(); i++) {
+			historyRepository.delete(list.get(i));
+		}
+	}
+	
 }

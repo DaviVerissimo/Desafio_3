@@ -12,6 +12,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.compass.uol.davi.desafio3.exceptions.PostNotFoundException;
+import com.compass.uol.davi.desafio3.exceptions.PostProcessedException;
 import com.compass.uol.davi.desafio3.model.Comment;
 import com.compass.uol.davi.desafio3.model.History;
 import com.compass.uol.davi.desafio3.model.Post;
@@ -74,83 +76,144 @@ public class PostService {
 		return posts;
 	}
 
-	public Post seachPostByID(Integer id) {
+	public Post seachPostByID(Integer id) throws PostNotFoundException {
 		Post post = null;
 		Optional<Post> postAux = postRepository.findById(id);
 		if (postAux.isPresent()) {
 			post = postAux.get();
 		} else {
-			// launch exception PostNotFoundException
+			throw new PostNotFoundException();
 		}
 
 		return post;
 	}
 
-	public Post deletePostByID(Integer id) {
+	public Post deletePostByID(Integer id) throws PostNotFoundException {
 		Post post = this.seachPostByID(id);
 
 		if (!post.equals(null)) {
-			postRepository.deleteById(id);
+			if (post.getHistory().get(post.getHistory().size() - 1).getStatus().equals(State.ENABLED)) {
+				postRepository.deleteById(id);
+				commentService.deleteCommentOfPost(id);
+				historyService.deleteHistoryOfPost(id);
+			}
 		} else {
-			// launch exception PostNotFoundException
+			throw new PostNotFoundException();
 		}
 
 		return post;
 	}
 
-	public Post processPostByID(Integer postId) {
-		
-		Post post = this.seachPostByID(postId);
-		if (post.isProcessed()) {
-			// launch postProcessedException
+	public Post disablePostById(Integer id) throws PostNotFoundException {
+		Post post = this.seachPostByID(id);
+		if (post.getHistory().get(post.getHistory().size() - 1).getStatus().equals(State.ENABLED)) {
+			History history = historyService.saveHistory(id, State.DISABLED);
+			List<History> list = historyService.getHistoryOfPost(id);
+			list.add(history);
+			post.setHistory(list);
+			this.savePost(post);
+
 		}
-		
-		//CRIANDO	
-		
-		History history = historyService.saveHistory(postId, State.CREATED);
+
+		return post;
+	}
+
+	public Post reprocessPostById(Integer id) throws PostNotFoundException {
+		Post post = this.seachPostByID(id);
+		History history = historyService.saveHistory(id, State.UPDATING);
 		List<History> list = new ArrayList<>();
 		list.add(history);
 		post.setHistory(list);
+		post.setProcessed(false);
+		post.setReprocessed(true);
 		this.savePost(post);
-		
-		//	post_find
-		
+		this.processPostByID(id);
+
+		return post;
+	}
+
+	public Post processPostByID(Integer postId) throws PostNotFoundException {
+
+		Post post = this.seachPostByID(postId);
+		if (post.isProcessed()) {
+			try {
+				throw new PostProcessedException();
+			} catch (PostProcessedException e) {
+				System.err.print(e.getMessage());
+			}
+		}
+
+		History history;
+		List<History> list;
+
+		// CRIANDO
+
+		if (!post.isReprocessed()) {
+			history = historyService.saveHistory(postId, State.CREATED);
+			list = new ArrayList<>();
+			list.add(history);
+			post.setHistory(list);
+			this.savePost(post);
+		} else {
+			list = historyService.getHistoryOfPost(postId);
+		}
+
+		// post_find
+
 		history = historyService.saveHistory(postId, State.POST_FIND);
 		list.add(history);
 		post.setHistory(list);
 		this.savePost(post);
-		
+
 		// post_ok
-		
+
 		history = historyService.saveHistory(postId, State.POST_OK);
 		list.add(history);
 		post.setHistory(list);
 		this.savePost(post);
-		
+
 		// comment_find
-		
+
 		history = historyService.saveHistory(postId, State.COMMENTS_FIND);
 		list.add(history);
 		post.setHistory(list);
 		this.savePost(post);
 		List<Comment> listComment = commentService.getCommentOfPost(postId);
 		post.setComments(listComment);
-		
+
+		// fail
+
+		if (listComment.isEmpty() || listComment.equals(null)) {
+			history = historyService.saveHistory(postId, State.FAILED);
+			list.add(history);
+			post.setHistory(list);
+			this.savePost(post);
+
+			// disabled
+
+			history = historyService.saveHistory(postId, State.DISABLED);
+			list.add(history);
+			post.setHistory(list);
+			this.savePost(post);
+
+			return post;
+		}
+
 		// comment_ok
-		
+
 		history = historyService.saveHistory(postId, State.COMMENTS_OK);
 		list.add(history);
 		post.setHistory(list);
 		this.savePost(post);
-		
+
 		// enabled
-		
+
 		history = historyService.saveHistory(postId, State.ENABLED);
 		list.add(history);
 		post.setHistory(list);
 		post.setProcessed(true);
 		this.savePost(post);
-		
+
 		return post;
 	}
 

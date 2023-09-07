@@ -19,15 +19,15 @@ import dto.CommentDTO;
 
 @Service
 public class CommentService {
-	
+
 	private CommentRepository commentRepository;
 
 	@Autowired
 	public CommentService(CommentRepository commentRepository) {
-		
+
 		this.commentRepository = commentRepository;
 	}
-	
+
 	public List<CommentDTO> seachAllCommentAPI() throws IOException, InterruptedException {
 		HttpClient httpClient = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://jsonplaceholder.typicode.com/comments"))
@@ -40,7 +40,7 @@ public class CommentService {
 
 		return comments;
 	}
-	
+
 	public List<CommentDTO> saveAllComments(List<CommentDTO> comments) {
 		for (int i = 0; i < comments.size(); i++) {
 			Comment comment = new Comment(comments.get(i));
@@ -51,19 +51,26 @@ public class CommentService {
 	}
 
 	public Comment saveComment(Comment comment) {
-		
+
 		return commentRepository.save(comment);
-		
+
 	}
 
 	public List<Comment> getAllComment() {
-		
+
 		return commentRepository.findAll();
 	}
-	
+
 	public List<Comment> getCommentOfPost(Integer postId) {
-		
+
 		return commentRepository.findByPostId(postId);
+	}
+
+	public void deleteCommentOfPost(Integer postId) {
+		List<Comment> list = this.getCommentOfPost(postId);
+		for (int i = 0; i < list.size(); i++) {
+			commentRepository.delete(list.get(i));
+		}
 	}
 
 }
